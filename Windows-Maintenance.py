@@ -141,7 +141,10 @@ def account_exists(sid):
         log(f"Error checking account existence: {e}")
     return False
 
-def delete_registry_sid(sid, dry_run=False):
+def delete_registry_sid(sid, dry_run=False, current_user_sid=None):
+    if sid == current_user_sid:
+        log("Refusing to delete the current user's SID from registry!")
+        return
     if dry_run:
         log(f"[dry-run] Would delete registry key: HKLM\\{PROFILE_LIST_REG}\\{sid}")
         return
@@ -160,7 +163,7 @@ def delete_registry_sid(sid, dry_run=False):
         try: hive.Close()
         except: pass
 
-def delete_profile_folder(path, dry_run=False):
+def delete_profile_folder(path, dry_run=False, current_user_sid=None):
     if not path:
         log("No profile path provided.")
         return
@@ -171,6 +174,11 @@ def delete_profile_folder(path, dry_run=False):
     allowed_base = os.path.join(os.path.abspath(os.sep), "Users")
     if not os.path.abspath(expanded).lower().startswith(allowed_base.lower()):
         log(f"Refusing to delete folder outside C:\\Users: {expanded}")
+        return
+    # Prevent deleting current user's folder
+    current_sid_path = get_profile_path(current_user_sid)
+    if current_sid_path and os.path.abspath(expanded).lower() == os.path.abspath(current_sid_path).lower():
+        log("Refusing to delete current user's profile folder!")
         return
     if dry_run:
         log(f"[dry-run] Would delete profile folder: {expanded}")
@@ -246,8 +254,8 @@ def block_ipc_smb():
 
 # -------------------- Orphaned SID Cleanup --------------------
 def orphaned_sid_cleanup(dry_run=False):
-    print_safe("\n=== Orphaned SID Cleanup ===")
     current_sid = get_current_user_sid()
+    print_safe("\n=== Orphaned SID Cleanup ===")
     log(f"Current user SID: {current_sid}")
 
     sids = list_profile_sids()
@@ -270,8 +278,8 @@ def orphaned_sid_cleanup(dry_run=False):
         while True:
             choice = input("Delete this SID and its profile? (yes/NO/skip all remaining) ").strip().lower()
             if choice == "yes":
-                delete_registry_sid(sid, dry_run=dry_run)
-                delete_profile_folder(profile_path, dry_run=dry_run)
+                delete_registry_sid(sid, dry_run=dry_run, current_user_sid=current_sid)
+                delete_profile_folder(profile_path, dry_run=dry_run, current_user_sid=current_sid)
                 break
             elif choice == "no":
                 log(f"Skipped deletion of SID: {sid}")
@@ -352,14 +360,22 @@ def admin_share_cleanup(dry_run=False, force=False):
     except UnboundLocalError:
         print_safe("No registry backup path available (export may have failed earlier).")
 
+# -------------------- Startup Banner --------------------
+def startup_banner(current_sid):
+    print("===================================================")
+    print("Windows Maintenance Script by Sid Gifari")
+    print("From Gifari Industries - BD Cyber Security Team")
+    print("===================================================")
+    print(f"Current logged-in user SID: {current_sid}")
+    print("⚠ WARNING: Your current account cannot be deleted!")
+    print("All deletion operations will skip this user automatically.")
+    print("===================================================\n")
+
 # -------------------- Interactive Menu --------------------
-def interactive_menu():
+def interactive_menu(current_sid):
     dry_run = False
     while True:
-        print("===============================================")
-        print("\nWindows Maintenance Menu Script By Sid Gifari")
-        print("From Gifari Industries - BD Cyber Security Team")
-        print("===============================================")
+        print(f"Current logged-in user SID: {current_sid}")
         print("1: Orphaned SID Cleanup")
         print("2: Administrative Share Cleanup")
         print("3: Both (SID + Admin Share Cleanup)")
@@ -395,8 +411,12 @@ if __name__ == "__main__":
 
     init_logging()
 
+    # Get current user SID
+    current_sid = get_current_user_sid()
+    startup_banner(current_sid)  # Display the warning banner
+
     try:
-        interactive_menu()
+        interactive_menu(current_sid)
     except Exception as exc:
         print_safe("ERROR: " + str(exc))
         sys.exit(1)
