@@ -99,7 +99,7 @@ Preview changes with dry-run mode before applying.
 
 Clone the Repository
 
-git clone https://github.com/sidgifari07/windows-sid-admin-cleanup.git
+git clone [https://github.com/sidgifari07/windows-sid-admin-cleanup.git]
 
 python Windows-Maintenance.py
 
