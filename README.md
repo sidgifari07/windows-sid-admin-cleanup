@@ -108,15 +108,8 @@ Interactive Menu
 
 You will see options like this:
 
-===============================================
-Windows Maintenance Menu Script By Sid Gifari
-From Gifari Industries - BD Cyber Security Team
-===============================================
-1: Orphaned SID Cleanup
-2: Administrative Share Cleanup
-3: Both (SID + Admin Share Cleanup)
-4: Toggle Dry-Run Mode (currently OFF)
-0: Exit
+<img width="922" height="528" alt="image" src="https://github.com/user-attachments/assets/55d3600a-169e-471a-92ef-5cc31e1c48bb" />
+
 
 
 Select your desired operation and follow on-screen prompts.
