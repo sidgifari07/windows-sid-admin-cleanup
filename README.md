@@ -109,8 +109,11 @@ Interactive Menu
 You will see options like this:
 
 <img width="922" height="528" alt="image" src="https://github.com/user-attachments/assets/55d3600a-169e-471a-92ef-5cc31e1c48bb" />
-
-
+===================================================================================================================================
+<img width="1066" height="607" alt="image" src="https://github.com/user-attachments/assets/0c85b036-082a-413c-9367-ee1acb2162bd" />
+===================================================================================================================================
+<img width="1096" height="642" alt="image" src="https://github.com/user-attachments/assets/bf2ef8dc-121d-4fda-b376-a0997bb6161c" />
+===================================================================================================================================
 
 Select your desired operation and follow on-screen prompts.
 
