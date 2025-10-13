@@ -4,17 +4,6 @@
 
 > Windows Maintenance Utility – Orphaned SID Removal & Admin Share Hardening
 
----
-
-## 📌 Table of Contents
-- [⚠️ Warning – Use With Caution](#-warning--use-with-caution)
-- [✨ Features](#-features)
-- [🎯 Use Cases](#-use-cases)
-- [🛠 Requirements](#-requirements)
-- [💻 Usage](#-usage)
-- [🚀 Getting Started](#-getting-started)
-- [📸 Screenshots](#-screenshots)
-- [⚠️ Disclaimer](#-disclaimer)
 
 ---
 
